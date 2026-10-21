@@ -1,0 +1,133 @@
+---
+title: Markdown features
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Markdown features
+
+This page shows how standard Docusaurus Markdown looks with the theme. You don't need to do anything to get these styles.
+
+## Text
+
+Documents are set in Jost, as the design system's own document pages are, at 17px with a line height of 1.6. Headings use Jost too, at the regular weight. **Bold** and *italic* work as usual, and [links](./getting-started.mdx) are underlined and turn teal on hover.
+
+> Intricate software from simple, rigorous rules. Quotes take a rule at the start edge and recede in muted ink.
+
+- Lists use the reading face.
+- Nested lists too:
+  - one level down
+  - and another item
+- And `inline code` sits on a sunken ground.
+
+1. Tile the plane with simple shapes.
+2. From each edge's midpoint, draw two lines at a fixed angle.
+3. Remove the scaffolding. The pattern holds.
+
+### A third-level heading
+
+Each heading level steps down the design system's type scale. Sections are separated by space, not cards or background blocks.
+
+#### A fourth-level heading
+
+For small groups inside a section.
+
+## Admonitions
+
+Each tone pairs its colour with an icon and a word, so colour is never the only signal.
+
+:::note
+A note, for asides the reader can skip.
+:::
+
+:::tip
+A tip, for a better way to do something.
+:::
+
+:::info
+Information, for context the reader needs.
+:::
+
+:::warning
+A warning, for something that could go wrong. Say how to avoid it.
+:::
+
+:::danger
+Danger, for something that can't be undone. Say what happens and how to recover.
+:::
+
+:::tip[Custom titles stay in sentence case]
+Write the title as you want it to appear. The theme capitalises only the first letter.
+:::
+
+## Code
+
+```js title="src/pages/index.js" showLineNumbers
+import Layout from '@theme/Layout';
+import ArabesqueHero from '@theme/ArabesqueHero';
+
+export default function Home() {
+  // highlight-next-line
+  const title = 'Documentation from simple, rigorous rules.';
+  return (
+    <Layout title="Home">
+      <ArabesqueHero title={title} primary={{label: 'Get started', to: '/docs'}} />
+    </Layout>
+  );
+}
+```
+
+```css
+.note {
+  border: 1px solid var(--border);
+  color: var(--foreground-muted);
+  padding: var(--space-4) var(--space-5);
+}
+```
+
+## Tabs
+
+<Tabs>
+  <TabItem value="npm" label="npm" default>
+
+```bash
+npm install @arabesquelabs/docusaurus-theme-arabesque
+```
+
+  </TabItem>
+  <TabItem value="yarn" label="Yarn">
+
+```bash
+yarn add @arabesquelabs/docusaurus-theme-arabesque
+```
+
+  </TabItem>
+  <TabItem value="pnpm" label="pnpm">
+
+```bash
+pnpm add @arabesquelabs/docusaurus-theme-arabesque
+```
+
+  </TabItem>
+</Tabs>
+
+## Tables
+
+Tables use hairlines between rows, a stronger rule under the header, and small muted header labels. No stripes or fills.
+
+| Token | Light | Dark | Use |
+| --- | --- | --- | --- |
+| `background` | `#f1f2ee` | `#0d1320` | Page ground |
+| `foreground` | `#131a2b` | `#e7e9e3` | Reading text |
+| `primary` | `#0d6b66` | `#5cc4b7` | Accent, links, focus |
+| `border` | `#cdd1d4` | `#2a3345` | Hairlines |
+
+## Details
+
+<details>
+  <summary>What is the 4.8.8 tiling?</summary>
+
+A tiling of the plane by regular octagons and squares, with two octagons and one square meeting at every vertex. The pattern is drawn on it.
+
+</details>

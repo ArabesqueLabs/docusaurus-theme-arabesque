@@ -1,0 +1,86 @@
+---
+title: Getting started
+---
+
+# Getting started
+
+The theme works with any Docusaurus 3 site that uses the classic preset (`@docusaurus/preset-classic`). It needs Node.js 20 or newer.
+
+## 1. Create a site, if you don't have one
+
+Skip this step if you're adding the theme to an existing site.
+
+```bash
+npx create-docusaurus@latest my-docs classic
+cd my-docs
+```
+
+## 2. Install the theme
+
+```bash
+npm install @arabesquelabs/docusaurus-theme-arabesque
+```
+
+## 3. Add it to your config
+
+List the theme under `themes`, and use its code colours.
+
+```js title="docusaurus.config.js"
+// highlight-next-line
+import {lightCodeTheme, darkCodeTheme} from '@arabesquelabs/docusaurus-theme-arabesque/prism';
+
+export default {
+  // ...
+  presets: [['classic', {/* docs, blog, theme.customCss */}]],
+
+  // highlight-next-line
+  themes: ['@arabesquelabs/docusaurus-theme-arabesque'],
+
+  themeConfig: {
+    prism: {
+      // highlight-start
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
+      // highlight-end
+    },
+  },
+};
+```
+
+## 4. Clear out the starter colours
+
+The classic template's `src/css/custom.css` sets Infima's primary colour to green. The theme overrides it, but remove those lines so the file holds only your own additions.
+
+```css title="src/css/custom.css"
+/* Site-specific styles. Use the design system's tokens: var(--al-color-accent), var(--al-space-4). */
+```
+
+## 5. Add the logo and favicon
+
+Copy the SVGs from the theme's `assets/logos` folder into your site's `static/img` folder.
+
+```bash
+cp node_modules/@arabesquelabs/docusaurus-theme-arabesque/assets/logos/*.svg static/img/
+```
+
+Then set them in your config. [Configuration](./configuration.mdx#logo-and-favicon) has the details. A product's docs use the product's own logo instead.
+
+## 6. Start the site
+
+```bash
+npm start
+```
+
+:::tip
+If the site still shows the old styles, stop the server and run `npm run clear`, then `npm start` again. Docusaurus caches theme components between runs.
+:::
+
+## Work on the theme itself
+
+The theme and this site live together in [one repository](https://github.com/ArabesqueLabs/docusaurus-theme-arabesque), as an npm workspace.
+
+```bash
+npm ci
+npm start        # this site, at http://localhost:3000, using the theme in packages/
+npm run build    # production build in website/build
+```

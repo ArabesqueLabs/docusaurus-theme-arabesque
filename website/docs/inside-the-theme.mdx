@@ -1,0 +1,46 @@
+---
+title: Inside the theme
+---
+
+# Inside the theme
+
+What the theme brings to a Docusaurus site, how it plugs in, and how its logo is drawn.
+
+## What you get
+
+- **Tokens.** Every colour, size, space and duration from the design system, as its own `--al-*` custom properties, in light and dark.
+- **Type.** Jost for headings and interface, Newsreader for ledes and prose, IBM Plex Mono for code, and the Arabic faces Kufam, IBM Plex Sans Arabic and Amiri. The font files come with the theme.
+- **The classic theme, restyled** after the design system's own components: the site header, sidebar, on-this-page list, notices, code blocks, tables, tabs, buttons, blog and footer.
+- **Components.** The generative pattern, the mark, a homepage hero, numbered steps and the icon set, ready to use in pages and MDX.
+- **Code colours.** A Prism theme drawn from the design system's syntax tokens.
+
+## How the logo is drawn
+
+The logo keeps Docusaurus's composition, a square dinosaur facing right and holding a page, and draws every part of it from the design system's pattern rule:
+
+| Docusaurus | Arabesque |
+| --- | --- |
+| A green body | A square body, filled with the 4.8.8 pattern's strands |
+| A spiky back | The tiling's squares, straddling the edge |
+| The eye | The mark's eight-point star, at the centre of a tile |
+| Teeth | A zigzag strand |
+| Round hands and feet | Octagons, each with its star |
+| A lined page | A page with a folded corner, carrying the star |
+
+Its colours sit halfway between Docusaurus's green and yellow and Arabesque's teal and sand.
+
+## How it works
+
+The theme is a Docusaurus plugin. When you add it to `themes`, it:
+
+1. Loads the design system's font files, its `tokens.css`, and the theme's `theme.css`, which maps Infima's variables onto the tokens and restyles the classic theme.
+2. Provides its components under `@theme/`, and replaces a few classic-theme components: admonitions, and the menu, close and colour mode icons.
+
+Nothing else changes. Docs, blog, sidebars, versioning, search and plugins work as they always have.
+
+## Next
+
+- [Getting started](./getting-started.mdx): install the theme.
+- [Configuration](./configuration.mdx): logo, favicon, code colours and options.
+- [Components](./components.mdx): what you can use in pages and MDX.
+- [Customising tokens](./customising-tokens.mdx): the tokens, and how to update to a new release of the design system.

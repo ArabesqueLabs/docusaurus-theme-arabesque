@@ -1,0 +1,155 @@
+---
+title: Configuration
+---
+
+# Configuration
+
+The theme needs one line in `docusaurus.config.js`. Everything on this page is optional and makes the site match the design system more closely.
+
+## Theme options
+
+Pass options as the second item of a tuple.
+
+```js title="docusaurus.config.js"
+export default {
+  themes: [['@arabesquelabs/docusaurus-theme-arabesque', {fonts: true}]],
+};
+```
+
+| Option | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `fonts` | `boolean` | `true` | Loads the design system's font files, which come with the theme: Jost, Newsreader, IBM Plex Mono, Kufam, IBM Plex Sans Arabic and Amiri. Set it to `false` when the site loads them itself. |
+| `footer.blurb` | `string` | | A line on what the site is, in the footer's about column. |
+| `footer.attribution` | `{label, href}` | | Who makes the site, in words the footer's logo says in a speech bubble, such as "Psst. I'm a product of Arabesque Labs." Without a logo, it's a pill under the blurb. |
+
+The fonts are served from your own site, so pages make no requests to a font service.
+
+## Logo and favicon
+
+The theme ships its own logo and the design system's marks in its `assets/logos` folder. They're brand assets of Arabesque Labs Ltd., not covered by the theme's MIT licence:
+
+| File | Use |
+| --- | --- |
+| `arabesque-docusaurus.svg` | This theme's logo: the Docusaurus dinosaur redrawn in the pattern, its body filled with the 4.8.8 strands. For 48px and up. |
+| `arabesque-docusaurus-plain.svg` | The same logo without the pattern, for 32 to 64px, as in a navbar. |
+| `arabesque-docusaurus-favicon.svg` | The body, mouth and page only, for 16 to 24px. |
+| `arabesque-mark-ink.svg`, `arabesque-mark-reversed.svg` | Arabesque's mark (four tiles), on light and dark grounds. |
+| `arabesque-favicon.svg` | Arabesque's four stars, switching ink with the system's colour scheme. |
+| `mark-ink.svg`, `mark-reversed.svg` | The Arabesque Labs mark (one tile), on light and dark grounds. |
+| `favicon.svg` | The Arabesque Labs star, switching ink with the system's colour scheme. |
+
+Copy the ones you need to `static/img`, then set the navbar logo and favicon. The theme's logo is in colour and works on light and dark grounds as it is; for the one-ink marks, `srcDark` swaps in the reversed file when the site is in dark mode.
+
+```js title="docusaurus.config.js"
+export default {
+  favicon: 'img/arabesque-docusaurus-favicon.svg',
+  themeConfig: {
+    navbar: {
+      title: 'Arabesque',
+      logo: {
+        alt: 'Arabesque for Docusaurus, home',
+        src: 'img/arabesque-docusaurus-plain.svg',
+        width: 32,
+        height: 32,
+      },
+    },
+  },
+};
+```
+
+A product's docs keep the product's own name and logo in the navbar. The navbar title is set as the design system's wordmark: Jost 500, tracked 0.05em.
+
+## Code colours
+
+The theme exports a Prism theme drawn from the design system's syntax tokens. Its colours are CSS custom properties, so the same theme follows light and dark on its own; Docusaurus asks for one per mode, so pass it twice.
+
+```js title="docusaurus.config.js"
+import {lightCodeTheme, darkCodeTheme} from '@arabesquelabs/docusaurus-theme-arabesque/prism';
+
+export default {
+  themeConfig: {
+    prism: {
+      theme: lightCodeTheme,
+      darkTheme: darkCodeTheme,
+    },
+  },
+};
+```
+
+## Colour mode
+
+Light is the design default; dark is a full theme of its own. Let the site follow the reader's system setting:
+
+```js title="docusaurus.config.js"
+export default {
+  themeConfig: {
+    colorMode: {
+      defaultMode: 'light',
+      respectPrefersColorScheme: true,
+    },
+  },
+};
+```
+
+As in the design system's header, the colour mode button has one icon, the half-filled disc, which turns half a turn when the page is dark. Its label says which mode is chosen.
+
+## Footer
+
+The footer follows Arabesque Labs' sites:
+
+- **The blurb:** the theme's `footer.blurb`, at the start.
+- **The link columns:** `footer.links`, side by side at the end.
+- **The legal lines:** `footer.copyright`, under a hairline.
+- **The footer's `logo`:** it stands on that hairline at the start, larger than anything else in the footer, leans a little, and hops when you point at it. It says the theme's `footer.attribution` in a comic speech bubble, in Kufam, the design system's most playful face.
+
+```js title="docusaurus.config.js"
+export default {
+  themes: [
+    [
+      '@arabesquelabs/docusaurus-theme-arabesque',
+      {
+        footer: {
+          blurb: 'What this site is, in one line.',
+          attribution: {label: "Psst. I'm a product of Arabesque Labs.", href: 'https://arabesquelabs.com'},
+        },
+      },
+    ],
+  ],
+  themeConfig: {
+    footer: {
+      logo: {src: 'img/arabesque-docusaurus.svg', alt: 'Back to the top', href: '#', width: 160, height: 160},
+      links: [/* columns of links */],
+      copyright: `<p>Made with ♥ at Arabesque Labs | © ${new Date().getFullYear()}</p>`,
+    },
+  },
+};
+```
+
+Both footer styles keep the page's ground: the design system separates sections with hairlines, not background fills.
+
+## What the theme replaces
+
+The theme restyles the classic theme with CSS, and replaces these components:
+
+| Component | Change |
+| --- | --- |
+| `Admonition/Layout` | Admonitions become the design system's notices: the kind's icon and title word, on its wash, with a rule at the start edge. |
+| `Admonition/Icon/*` | The design system's status icons. |
+| `Icon/LightMode`, `Icon/DarkMode`, `Icon/SystemColorMode` | The design system's theme icon. |
+| `Icon/Menu`, `Icon/Close` | The design system's icons: 1.5px stroke, square caps. |
+| `Footer/Layout` | The footer described above: the blurb, link columns, legal lines, and the logo on the hairline with its speech bubble. |
+| `MDXComponents` | Adds the [Arabesque components](./components.mdx) to every MDX file. |
+
+## Changing a component further
+
+Swizzle as you would with any Docusaurus theme. Your site's `src/theme` folder wins over the Arabesque theme, which wins over the classic theme.
+
+```bash
+# Copy the Arabesque admonition layout into src/theme to edit it
+npm run swizzle @arabesquelabs/docusaurus-theme-arabesque Admonition/Layout -- --eject
+
+# Wrap a classic-theme component
+npm run swizzle @docusaurus/theme-classic Footer -- --wrap
+```
+
+Inside your own components, use the design system's tokens rather than raw values: `var(--al-color-accent)`, `var(--al-color-line)`, `var(--al-font-serif)`. [Customising tokens](./customising-tokens.mdx) lists them.

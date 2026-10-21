@@ -1,0 +1,172 @@
+---
+title: Components
+---
+
+import {names as iconNames} from '@theme/ArabesqueIcon';
+
+# Components
+
+The theme provides five components. In MDX files they're available without an import. In React pages and components, import them from `@theme/`.
+
+```jsx
+import ArabesqueHero from '@theme/ArabesqueHero';
+import ArabesquePattern from '@theme/ArabesquePattern';
+import ArabesqueMark from '@theme/ArabesqueMark';
+import ArabesqueSteps from '@theme/ArabesqueSteps';
+import ArabesqueIcon from '@theme/ArabesqueIcon';
+```
+
+## ArabesquePattern
+
+The generative background: Hankin's polygons-in-contact on the 4.8.8 tiling, at a contact angle of 67.5°. It fills its positioned parent and is hidden from assistive technology. The geometry is computed, never drawn by hand, and regenerates only when the width changes.
+
+<div className="al-pattern-band">
+  <ArabesquePattern variant="lines" fade />
+</div>
+
+```jsx
+<div style={{position: 'relative', height: 160}}>
+  <ArabesquePattern variant="lines" fade />
+</div>
+```
+
+The theme includes a class for this: `<div className="al-pattern-band">` is a 10rem band with hairlines above and below.
+
+A `quiet` field, for small areas:
+
+<div className="al-pattern-band">
+  <ArabesquePattern variant="quiet" />
+</div>
+
+| Prop | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `variant` | `'hero' \| 'lines' \| 'quiet'` | `'hero'` | `hero`: one quiet line with the teal focal tile. `lines`: the same line for section breaks and empty states. `quiet`: a low-contrast field. |
+| `caption` | `ReactNode` | | Caption under the focal tile, at 900px and wider. |
+| `fade` | `boolean` | `false` | Fades the lines away from the text side (`lines`). |
+| `animate` | `boolean` | `true` | Draws the hero in once on first load. Skipped under reduced motion. |
+| `focal` | `boolean` | `true` | Shows the focal tile (`hero`, 900px and wider). |
+| `side` | `number` | 46/30 or 32/22 | Polygon side in px, either side of 900px. |
+| `angle` | `number` | `67.5` | Contact angle. Keep 67.5 outside teaching figures. |
+
+:::note
+Text sits on the hero's strands only for the heading and lede. Keep body copy off the pattern. In Windows high-contrast mode the pattern hides.
+:::
+
+## ArabesqueHero
+
+The homepage hero: the pattern behind one display heading, a lede, one primary action and a text link. Use one per site, on the homepage.
+
+```jsx title="src/pages/index.js"
+import Layout from '@theme/Layout';
+import ArabesqueHero from '@theme/ArabesqueHero';
+
+export default function Home() {
+  return (
+    <Layout title="Home">
+      <ArabesqueHero
+        title="Documentation from simple, rigorous rules."
+        lede="A short paragraph that says what this site is for."
+        primary={{label: 'Get started', to: '/docs/getting-started'}}
+        secondary={{label: 'See the components', to: '/docs/components'}}
+        caption="This tile is our mark. Everything around it follows from the same rule."
+      />
+      <main id="main">{/* sections */}</main>
+    </Layout>
+  );
+}
+```
+
+| Prop | Type | What it does |
+| --- | --- | --- |
+| `title` | `ReactNode` | The page's one display heading (H1). |
+| `lede` | `ReactNode` | The paragraph under it. |
+| `primary` | `{label, to}` | The one primary button. Name the action: "Get started", not "Learn more". |
+| `secondary` | `{label, to}` | A text link with an arrow, for the second action. |
+| `caption` | `ReactNode` | Caption under the focal tile. |
+| `pattern` | `boolean` | Set to `false` to leave the pattern out. Default `true`. |
+
+## ArabesqueMark
+
+The Arabesque mark, in `currentColor`. `symbol="labs"` gives the single-tile Arabesque Labs mark.
+
+<div className="demo-row">
+  <ArabesqueMark size={40} />
+  <ArabesqueMark variant="symbol" size={40} />
+  <ArabesqueMark symbol="labs" size={40} />
+</div>
+
+```jsx
+<ArabesqueMark size={40} />
+<ArabesqueMark variant="symbol" size={40} />
+<ArabesqueMark symbol="labs" size={40} />
+```
+
+| Prop | Type | Default | What it does |
+| --- | --- | --- | --- |
+| `symbol` | `'arabesque' \| 'labs'` | `'arabesque'` | Four tiles (Arabesque) or one tile (Arabesque Labs). |
+| `variant` | `'horizontal' \| 'stacked' \| 'symbol'` | `'horizontal'` | With the wordmark beside, below, or not at all. |
+| `size` | `number` | `32` | Symbol size in px. Never below 16. |
+| `wordmark` | `string` | per symbol | The name beside the symbol. |
+| `decorative` | `boolean` | `false` | Hide from assistive tech when a parent link already names it. |
+
+Leave clear space of a quarter of the symbol's width on every side.
+
+## ArabesqueSteps
+
+A numbered sequence with a rule above each item and the number in teal. Use it only for real sequences.
+
+<ArabesqueSteps
+  columns
+  items={[
+    {title: 'Discover', body: 'Start with the real problem, not the assumed solution.'},
+    {title: 'Design', body: 'Structure comes before pixels.'},
+    {title: 'Build', body: 'Small, deliberate increments, reviewed and tested at every step.'},
+  ]}
+/>
+
+```jsx
+<ArabesqueSteps
+  columns
+  items={[
+    {title: 'Discover', body: 'Start with the real problem, not the assumed solution.'},
+    {title: 'Design', body: 'Structure comes before pixels.'},
+    {title: 'Build', body: 'Small, deliberate increments, reviewed and tested at every step.'},
+  ]}
+/>
+```
+
+## ArabesqueIcon
+
+The design system's icon set: a 24px grid, 1.5px stroke, square caps and mitred joins. Icons inherit the text colour and are hidden from assistive technology unless you give them a `label`. `arrow`, `chevron` and `external` mirror in right-to-left layouts.
+
+<div className="demo-row">
+  {iconNames.map((name) => (
+    <span key={name} title={name}>
+      <ArabesqueIcon name={name} />
+    </span>
+  ))}
+</div>
+
+```jsx
+<ArabesqueIcon name="success" />
+<ArabesqueIcon name="external" size={20} label="Opens in a new tab" />
+```
+
+Status icons always travel with a word. Never use emoji in their place.
+
+## CSS classes
+
+For pages built without these components, the theme also provides the system's type and layout classes.
+
+| Class | Use |
+| --- | --- |
+| `al-display` | The hero heading. One per page. |
+| `al-h1` | Section headings on landing pages. |
+| `al-lede` | The paragraph under a heading, in muted ink. |
+| `al-prose` | Prose in Newsreader, inside the 65ch measure. |
+| `al-muted` | Secondary text, in muted ink. |
+| `al-caption` | Captions and hints, small and muted. |
+| `al-link` | A text link with a teal underline. |
+| `al-section` | A full-width section with a hairline above and generous padding. |
+| `al-section__head` | A two-column heading and lede row inside a section. |
+| `al-pattern-band` | A 10rem band to hold a `lines` or `quiet` pattern. |
