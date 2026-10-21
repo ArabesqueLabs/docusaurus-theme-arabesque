@@ -1,0 +1,105 @@
+---
+title: Customising tokens
+---
+
+# Customising tokens
+
+Every value in the theme comes from the Arabesque design system's tokens: CSS custom properties named `--al-*`, the same names the design system's own CSS uses. The theme carries a copy of them (`src/css/tokens.css`), taken from a release of the design system.
+
+## Use the tokens
+
+Refer to tokens by name in `src/css/custom.css`, CSS modules and inline styles. They switch with the colour mode, and with Arabic, on their own.
+
+```css title="src/css/custom.css"
+.release-note {
+  padding: var(--al-space-4) var(--al-space-5);
+  border: var(--al-border-hairline) solid var(--al-color-line);
+  border-radius: var(--al-radius-sm);
+  font-family: var(--al-font-serif);
+  color: var(--al-color-text-muted);
+}
+```
+
+## Override a token for one site
+
+Redefine the token in `src/css/custom.css`. Set light values on `:root` and dark values on `:root[data-theme='dark']`, the attribute Docusaurus sets on `<html>`.
+
+```css title="src/css/custom.css"
+:root {
+  --al-size-measure: 70ch;
+}
+:root[data-theme='dark'] {
+  --al-color-bg: oklch(16% 0.017 265);
+}
+```
+
+:::warning
+Check contrast when you change a colour. Text must hold 4.5:1 on the grounds it's used on, in both themes; control borders, icons and the focus ring must hold 3:1.
+:::
+
+## Update to a new release of the design system
+
+The theme records the release it's built on in `package.json` (`arabesque.designSystem`). To move to a new one, check the release out beside the theme and copy it in:
+
+```bash
+git clone --depth 1 --branch v0.9.0 https://github.com/ArabesqueLabs/design-system.git ../design-system
+npm run sync-design-system -- ../design-system
+```
+
+The script copies the design system's built tokens, font files and licences, logos and icon set into the theme, and records the version. Then check the site, and the [design system's changelog](https://github.com/ArabesqueLabs/design-system/blob/main/CHANGELOG.md) for renamed tokens. Don't edit the copied files by hand.
+
+## The tokens
+
+### Colour
+
+| Token | Use |
+| --- | --- |
+| `--al-color-bg` | The page ground. |
+| `--al-color-surface`, `--al-color-surface-sunk` | Panels and cards; the sidebar, code and pressed grounds. |
+| `--al-color-text` | Text and the mark. |
+| `--al-color-text-muted` | Ledes, hints and metadata. |
+| `--al-color-line` | Hairlines. |
+| `--al-color-line-strong`, `--al-color-control` | Edges a reader must see; control borders. |
+| `--al-color-accent`, `--al-color-accent-hover`, `--al-color-on-accent` | The teal accent: primary buttons, link underlines, the current page, focus. |
+| `--al-color-accent-wash` | Selected and marked grounds, such as a marked code line. |
+| `--al-color-info`, `-success`, `-warning`, `-danger`, and their `-wash` grounds | Notices, always with an icon and a word. |
+| `--al-color-syntax-*` | Code colours. |
+| `--al-color-pattern-*` | The pattern. |
+| `--al-color-backdrop` | Behind the mobile menu and dialogs. |
+
+### Type
+
+| Token | Value |
+| --- | --- |
+| `--al-font-sans` | Jost, then IBM Plex Sans Arabic: interface and documents. |
+| `--al-font-display` | Jost, then Kufam: headings. |
+| `--al-font-serif` | Newsreader, then Amiri: ledes and prose. |
+| `--al-font-mono` | IBM Plex Mono: code. |
+| `--al-text-xs` … `--al-text-3xl`, `--al-text-display` | The type scale. Arabic runs 8% larger. |
+| `--al-leading-*`, `--al-tracking-*` | Line heights and letter spacing; Arabic has its own. |
+
+### Space, shape and motion
+
+| Token | Values |
+| --- | --- |
+| `--al-space-1` … `--al-space-16` | 4px to 64px; `--al-space-section` and `--al-space-gutter` are fluid. |
+| `--al-radius-sm`, `--al-radius-md`, `--al-radius-full` | 2px (buttons, fields, notices), 4px (overlays), round. |
+| `--al-size-page`, `--al-size-measure` | Page width (1200px) and line length (65ch). |
+| `--al-size-control-md`, `--al-size-target-touch` | Buttons and fields (40px), touch targets (44px). |
+| `--al-duration-fast`, `--al-duration-base`, `--al-ease-standard` | 150ms, 250ms, and the one easing curve. |
+
+There are no shadow tokens: borders and surface steps carry depth.
+
+## How the theme maps onto Infima
+
+The classic theme is built on Infima. The theme sets Infima's variables from the tokens, so classic components and your own Infima classes follow the design system:
+
+```css
+--ifm-color-primary: var(--al-color-accent);
+--ifm-background-color: var(--al-color-bg);
+--ifm-font-color-base: var(--al-color-text);
+--ifm-font-family-base: var(--al-font-sans);
+--ifm-global-radius: var(--al-radius-sm);
+```
+
+Change the design system's token rather than the Infima variable, so every place that uses it stays consistent.

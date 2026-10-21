@@ -1,0 +1,56 @@
+---
+title: Arabic and right-to-left
+---
+
+# Arabic and right-to-left
+
+The design system serves English and Arabic equally. The theme carries the Arabic type and the right-to-left rules, so an Arabic locale needs only Docusaurus's own i18n setup.
+
+## Add an Arabic locale
+
+```js title="docusaurus.config.js"
+export default {
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'ar'],
+    localeConfigs: {
+      ar: {label: 'العربية', direction: 'rtl', htmlLang: 'ar'},
+    },
+  },
+  themeConfig: {
+    navbar: {
+      items: [{type: 'localeDropdown', position: 'right'}],
+    },
+  },
+};
+```
+
+Then create the translation files and start the Arabic site:
+
+```bash
+npm run write-translations -- --locale ar
+npm start -- --locale ar
+```
+
+Docusaurus sets `lang="ar"` and `dir="rtl"` on `<html>` and loads Infima's right-to-left stylesheet. Each locale gets its own URL (`/` and `/ar/`) with `hreflang` alternates.
+
+## What the theme does under Arabic
+
+- **Type.** Arabic text is set in the design system's Arabic faces: IBM Plex Sans Arabic for interface and documents, Kufam for headings, and Amiri for prose.
+- **Size and leading.** Under `lang="ar"` the design system's tokens set Arabic 8% larger, with more line height (1.9 for prose).
+- **Tracking.** Letter spacing resets to 0 everywhere, because tracking breaks the joins.
+- **No capitals, no italic.** Nothing is ever set in capitals, and Arabic has no italic.
+- **Direction.** The layout mirrors; arrows, chevrons and the external-link icon flip.
+- **What doesn't mirror.** The mark, the pattern's geometry, numbers and code never mirror. The hero's focal tile moves to a quarter across instead of three quarters.
+
+## Writing Arabic content
+
+- Write Arabic as Arabic, not word-for-word translation: Modern Standard Arabic, in the same plain register.
+- Keep the brand name in Latin script, isolated with `<bdi>`, as you would emails and URLs:
+
+  ```mdx
+  <bdi>Arabesque Labs</bdi> استوديو برمجيات مستقل.
+  ```
+
+- Use Western digits (0–9) unless your audience expects Eastern Arabic digits.
+- In your own CSS, use logical properties only: `margin-inline-start`, `padding-inline`, `inset-inline-end`, `text-align: start`. Never `left` and `right` for layout.

@@ -1,0 +1,53 @@
+{
+  "name": "@arabesquelabs/docusaurus-theme-arabesque",
+  "version": "0.2.0",
+  "description": "A Docusaurus theme built on the Arabesque design system.",
+  "license": "MIT",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./prism": "./src/prism.js",
+    "./tokens.json": "./tokens.json",
+    "./assets/*": "./assets/*",
+    "./tokens.css": "./src/css/tokens.css"
+  },
+  "files": [
+    "src",
+    "assets",
+    "tokens.json",
+    "NOTICE.md"
+  ],
+  "keywords": [
+    "docusaurus",
+    "docusaurus-theme",
+    "arabesque"
+  ],
+  "scripts": {
+    "sync": "node scripts/sync-design-system.mjs"
+  },
+  "peerDependencies": {
+    "@docusaurus/core": "^3.0.0",
+    "@docusaurus/theme-classic": "^3.0.0",
+    "@docusaurus/theme-common": "^3.0.0",
+    "react": "^18.0.0 || ^19.0.0"
+  },
+  "type": "module",
+  "dependencies": {
+    "clsx": "^2.0.0"
+  },
+  "arabesque": {
+    "designSystem": "0.8.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArabesqueLabs/docusaurus-theme-arabesque.git",
+    "directory": "packages/docusaurus-theme-arabesque"
+  },
+  "homepage": "https://github.com/ArabesqueLabs/docusaurus-theme-arabesque",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20.0"
+  }
+}

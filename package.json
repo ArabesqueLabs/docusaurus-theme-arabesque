@@ -1,0 +1,20 @@
+{
+  "name": "arabesque-docusaurus",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "website"
+  ],
+  "scripts": {
+    "start": "npm run start -w website",
+    "build": "npm run build -w website",
+    "serve": "npm run serve -w website",
+    "sync-design-system": "npm run sync -w @arabesquelabs/docusaurus-theme-arabesque --"
+  },
+  "allowScripts": {
+    "@swc/core@1.16.18": true,
+    "core-js@3.51.0": true,
+    "fsevents@2.3.3": true,
+    "core-js-pure@3.51.0": true
+  }
+}
