@@ -179,6 +179,19 @@ strong, b { font-weight: var(--al-weight-semibold); }
 /* Sentence case everywhere: nothing is set in capitals. */
 .text--uppercase, .alert__heading, .footer__title, .menu__link, .table-of-contents, .badge { text-transform: none; }
 
+/* Read by screen readers, not shown. */
+.al-visually-hidden {
+  position: absolute !important;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ---------- Type helpers (the design system's utilities) ---------- */
 .al-display {
   margin: 0;
@@ -677,14 +690,26 @@ div[class*='announcementBar'] {
 [class*='backToTopButton']::after { background-color: var(--al-color-text); }
 
 /* ---------- Site footer (Footer/Layout) ---------- */
-/* A line on what the site is, and the link columns at the end; the legal
-   lines under a hairline. The footer's logo stands on that hairline at the start, and
-   says who makes the site in a speech bubble. */
+/* The footer's logo (and a line on what the site is) at the start, the link
+   columns at the end, both from the top; the legal lines under a hairline.
+   The logo says who makes the site in a comic speech bubble. */
+
+/* Comic Neue bold, comic lettering for the speech bubble only (SIL Open
+   Font License 1.1, src/speech/OFL-comicneue.txt). Not one of the design
+   system's faces: it's the bubble's, and loads only when the bubble shows. */
+@font-face {
+  font-family: 'Comic Neue';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../speech/comic-neue-700-latin.woff2') format('woff2');
+}
+
 .al-site-footer { padding-block: var(--al-space-16) 0; }
 .al-site-footer__inner {
   --_mascot: 10rem;
   --_bubble: 17rem;
-  --_speech: 1.125rem;
+  --_speech: 1.3rem;
   max-inline-size: var(--al-size-page);
   margin-inline: auto;
   padding-inline: var(--al-space-gutter);
@@ -698,8 +723,8 @@ div[class*='announcementBar'] {
   gap: var(--al-space-12) var(--al-space-16);
   padding-block-end: var(--al-space-12);
 }
-/* Room under the links for the logo, which rises from the hairline. */
-.al-site-footer--mascot .al-site-footer__top { padding-block-end: calc(var(--_mascot) * 1.05); }
+/* Room at the start for the logo and its bubble. */
+.al-site-footer--mascot .al-site-footer__top { grid-template-columns: minmax(0, calc(var(--_mascot) + var(--_bubble))) minmax(0, 1fr); }
 .al-site-footer__about { grid-area: about; }
 .al-site-footer__blurb {
   margin: 0;
@@ -747,16 +772,17 @@ div[class*='announcementBar'] {
 .al-site-footer .footer__copyright a { color: inherit; text-decoration: underline; text-decoration-color: var(--al-color-line-strong); text-underline-offset: 0.2em; }
 .al-site-footer .footer__copyright a:hover { color: var(--al-color-accent); text-decoration-color: currentColor; }
 
-/* The logo stands on the hairline at the start: its feet on the line, the
-   rest of it in the footer above. It leans a little, and hops when you point
-   at it. It's never mirrored, even right to left. */
+/* The logo, at the top of the start column, level with the link columns'
+   headings. It leans a little, and hops when you point at it. It's never
+   mirrored, even right to left. Its box is tall enough for the bubble that
+   hangs from its mouth. */
 .al-site-footer__mascot {
-  position: absolute;
-  inset-inline-start: 0;
-  inset-block-end: calc(100% - var(--_mascot) * 0.11);
+  position: relative;
   inline-size: var(--_mascot);
+  min-block-size: calc(var(--_mascot) * 0.3 + var(--_bubble) * 0.73);
   line-height: 0;
 }
+.al-site-footer__mascot + .al-site-footer__blurb { margin-block-start: var(--al-space-6); }
 .al-site-footer__dino a { display: block; opacity: 1; }
 .al-site-footer__dino img {
   display: block;
@@ -770,23 +796,23 @@ div[class*='announcementBar'] {
 .al-site-footer__dino:hover img { transform: translateY(-10px) rotate(-12deg); }
 
 /* The speech bubble: a comic bubble, white with an inked outline in either
-   theme, its tail at the logo's mouth, the words set in Kufam, the design
-   system's most playful face. It leans, and grows a little when you point
-   at it. */
+   theme, hanging beside the logo with its tail pointing up at its mouth; the
+   Arabesque Labs mark and the words in comic lettering. It leans, and grows a
+   little when you point at it. It opens in a new tab. */
 .al-site-footer__bubble {
   position: absolute;
-  inset-inline-start: calc(100% - var(--_mascot) * 0.04);
-  inset-block-end: 40%;
+  inset-inline-start: calc(100% - var(--_mascot) * 0.06);
+  inset-block-start: calc(var(--_mascot) * 0.3);
   inline-size: var(--_bubble);
   line-height: 0;
   text-decoration: none;
   transform: rotate(-4deg);
-  transform-origin: 0 100%;
+  transform-origin: 0 0;
   transition: transform var(--al-duration-base) var(--al-ease-standard);
 }
 .al-site-footer__bubble:hover { transform: rotate(-2deg) scale(1.04); text-decoration: none; }
 .al-site-footer__bubble:focus-visible { outline-offset: 4px; }
-.al-site-footer__bubble svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; }
+.al-site-footer__bubble svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; transform: scaleY(-1); }
 .al-site-footer__bubble path {
   fill: #ffffff;
   stroke: #0f172b;
@@ -796,27 +822,35 @@ div[class*='announcementBar'] {
 .al-site-footer__speech {
   position: absolute;
   inset-inline-start: 50.5%;
-  inset-block-start: 49%;
-  inline-size: 68%;
+  inset-block-start: 51%;
+  inline-size: 70%;
   translate: -50% -50%;
   color: #0f172b;
-  font-family: 'Kufam', var(--al-font-display);
+  font-family: 'Comic Neue', var(--al-font-display);
   font-size: var(--_speech);
-  font-weight: var(--al-weight-semibold);
-  line-height: 1.2;
+  font-weight: 700;
+  line-height: 1.15;
   letter-spacing: 0;
   text-align: center;
   text-wrap: balance;
 }
+/* The Arabesque Labs mark, in the bubble's ink whatever the theme. */
+.al-site-footer__speech .al-site-footer__speech-mark {
+  display: inline-flex;
+  margin-inline-end: 0.3em;
+  color: #0f172b;
+  vertical-align: -0.25em;
+}
 /* Right to left, the logo stands at the right: the bubble's tail turns to
    point back at it, and the lean turns too. */
-[dir='rtl'] .al-site-footer__bubble { transform: rotate(4deg); transform-origin: 100% 100%; }
+[dir='rtl'] .al-site-footer__bubble { transform: rotate(4deg); transform-origin: 100% 0; }
 [dir='rtl'] .al-site-footer__bubble:hover { transform: rotate(2deg) scale(1.04); }
-[dir='rtl'] .al-site-footer__bubble svg { transform: scaleX(-1); }
+[dir='rtl'] .al-site-footer__bubble svg { transform: scale(-1, -1); }
 [dir='rtl'] .al-site-footer__speech { translate: 50% -50%; }
 
 @media (max-width: 52rem) {
-  .al-site-footer__inner { --_mascot: 7rem; --_bubble: 13rem; --_speech: 0.95rem; }
+  .al-site-footer__inner { --_mascot: 7rem; --_bubble: 13rem; --_speech: 1.05rem; }
+  .al-site-footer--mascot .al-site-footer__top { grid-template-columns: minmax(0, 1fr); }
   .al-site-footer__top { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'about' 'links'; }
   .al-site-footer .footer__links { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: start; }
 }
