@@ -11,4 +11,4 @@ This repository is licensed in three parts.
 
   The licence for them is still to be decided. Until then, no rights are granted beyond those the law allows.
 
-**Third-party fonts** keep their own licences: Jost, Newsreader, IBM Plex Mono, IBM Plex Sans Arabic, Kufam and Amiri are under the SIL Open Font License 1.1, whose texts are in `packages/docusaurus-theme-arabesque/src/fonts/`.
+**Third-party fonts** keep their own licences: Jost, Newsreader, IBM Plex Mono, IBM Plex Sans Arabic, Kufam and Amiri are under the SIL Open Font License 1.1, whose texts are in `packages/docusaurus-theme-arabesque/src/fonts/`; Comic Neue, the footer speech bubble's lettering, is too, with its text in `packages/docusaurus-theme-arabesque/src/speech/`.

@@ -6,4 +6,4 @@
   - the mark artwork drawn by `src/theme/ArabesqueMark/`.
 
   The licence for them is still to be decided. Until then, no rights are granted beyond those the law allows.
-- **Fonts** keep their own licences: the SIL Open Font License 1.1, whose texts are in `src/fonts/`.
+- **Fonts** keep their own licences: the SIL Open Font License 1.1, whose texts are in `src/fonts/` (the design system's faces) and `src/speech/` (Comic Neue, for the footer's speech bubble).

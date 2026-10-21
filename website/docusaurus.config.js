@@ -52,7 +52,7 @@ const config = {
       '@arabesquelabs/docusaurus-theme-arabesque',
       {
         footer: {
-          attribution: {label: "Psst. I'm a product of Arabesque Labs.", href: 'https://arabesquelabs.com'},
+          attribution: {label: "a product of Arabesque Labs.", href: 'https://arabesquelabs.com'},
         },
       },
     ],

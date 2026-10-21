@@ -1,5 +1,7 @@
 # Arabesque for Docusaurus
 
+<picture><source media="(prefers-color-scheme: dark)" srcset="dist/brand/arabesque-mark-reversed.svg"><img src="dist/brand/arabesque-mark-ink.svg" width="56" height="56" alt=""></picture>
+
 [`@arabesquelabs/docusaurus-theme-arabesque`](packages/docusaurus-theme-arabesque): a Docusaurus 3 theme built on the [Arabesque design system](https://github.com/ArabesqueLabs/design-system), and a documentation site that uses it and explains how to use it.
 
 ```
@@ -31,10 +33,11 @@ npm run sync-design-system -- ../design-system
 
 ## Publish
 
+From the repository root (a plain `npm publish` there fails: the root is the private workspace, not the package):
+
 ```bash
-cd packages/docusaurus-theme-arabesque
-npm version minor          # or patch / major
-npm publish                # public, under the @arabesquelabs scope
+npm version minor -w @arabesquelabs/docusaurus-theme-arabesque   # or patch / major
+npm run release                                                 # public, under the @arabesquelabs scope
 ```
 
 ## Use it in your own site
