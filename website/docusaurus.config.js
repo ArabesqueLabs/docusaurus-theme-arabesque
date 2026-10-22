@@ -15,7 +15,7 @@ const config = {
     v4: true,
   },
 
-  url: 'https://arabesque.example.com',
+  url: 'https://docusaurus.arabesquelabs.com/',
   baseUrl: '/',
 
   onBrokenLinks: 'throw',
