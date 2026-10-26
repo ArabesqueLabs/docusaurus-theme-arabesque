@@ -1,4 +1,4 @@
-// Arabesque design system 0.8.0: the icon set, from dist/icons.svg.
+// Arabesque design system 0.9.0: the icon set, from dist/icons.svg.
 // Copied by scripts/sync-design-system.mjs. Don't edit.
 
 export default {

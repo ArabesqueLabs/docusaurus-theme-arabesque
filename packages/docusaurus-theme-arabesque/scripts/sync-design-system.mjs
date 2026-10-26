@@ -2,11 +2,11 @@
 //
 //   node scripts/sync-design-system.mjs <path to a design-system checkout>
 //
-// Check out the release first (git clone --branch v0.8.0
+// Check out the release first (git clone --branch v0.9.0
 // https://github.com/ArabesqueLabs/design-system.git). The script copies its
-// built tokens, the self-hosted fonts and their licences, the logos, and the
-// icon set, and records the version in package.json. Nothing it writes is
-// edited by hand.
+// built tokens, the self-hosted fonts and their licences, the logos and
+// attribution badges, and the icon set, and records the version in
+// package.json. Nothing it writes is edited by hand.
 
 import {copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync} from 'node:fs';
 import {dirname, join, resolve} from 'node:path';
@@ -51,6 +51,15 @@ const logos = [
 mkdirSync(join(root, 'assets/logos'), {recursive: true});
 for (const f of logos) copyFileSync(join(source, 'dist/brand', f), join(root, 'assets/logos', f));
 
+// The attribution badges, "A product of Arabesque Labs" with the star, in
+// English and Arabic: the dark pill for the light theme, the light pill for
+// the dark one (the footer's, Footer/Layout).
+const badges = ['en', 'ar'].flatMap((lang) =>
+  ['dark', 'light'].map((tone) => `product-of-${lang}-${tone}-star@2x.png`),
+);
+mkdirSync(join(root, 'assets/logos/badges'), {recursive: true});
+for (const f of badges) copyFileSync(join(source, 'dist/brand/badges', f), join(root, 'assets/logos/badges', f));
+
 // Icons: each <symbol> of the sprite, as its inner markup, keyed by name.
 const sprite = readFileSync(join(source, 'dist/icons.svg'), 'utf8');
 const icons = {};
@@ -71,5 +80,5 @@ pkg.arabesque = {designSystem: version};
 writeFileSync(pkgPath, `${JSON.stringify(pkg, null, 2)}\n`);
 
 console.log(
-  `Arabesque ${version}: tokens, ${fonts.length} font files, ${logos.length} logos, ${Object.keys(icons).length} icons.`,
+  `Arabesque ${version}: tokens, ${fonts.length} font files, ${logos.length} logos, ${badges.length} badges, ${Object.keys(icons).length} icons.`,
 );
