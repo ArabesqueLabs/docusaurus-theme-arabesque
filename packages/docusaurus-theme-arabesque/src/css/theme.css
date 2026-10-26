@@ -226,6 +226,9 @@ strong, b { font-weight: var(--al-weight-semibold); }
   line-height: var(--al-leading-prose);
 }
 .al-prose > * + * { margin-block-start: 1em; }
+/* Lists inside it (blockquotes and code in a sentence are styled everywhere). */
+.al-prose :is(ul, ol) { padding-inline-start: 1.25em; }
+.al-prose li + li { margin-block-start: var(--al-space-1); }
 .al-muted { color: var(--al-color-text-muted); }
 .al-caption { font-size: var(--al-text-sm); color: var(--al-color-text-muted); }
 
@@ -250,7 +253,7 @@ strong, b { font-weight: var(--al-weight-semibold); }
   letter-spacing: var(--al-tracking-wide);
 }
 .navbar__items { gap: var(--al-space-8); }
-.navbar__items--right { gap: var(--al-space-2); }
+.navbar__items--right { gap: var(--al-space-6); }
 .navbar__link {
   font-weight: var(--al-weight-regular);
   text-decoration: none;
@@ -275,22 +278,86 @@ strong, b { font-weight: var(--al-weight-semibold); }
 .dropdown__link { border-radius: var(--al-radius-sm); }
 .dropdown__link--active { background: var(--al-color-accent-wash); color: var(--al-color-text); }
 
-/* Icon buttons in the header: the theme toggle and the menu button. */
+/* Icon buttons in the header: the colour mode button (ColorModeToggle) and
+   the menu button. */
 .clean-btn { border-radius: var(--al-radius-sm); }
-[class*='colorModeToggle'] button,
+.al-theme-toggle__button,
 [class*='toggleButton'] {
   inline-size: var(--al-button-height);
   block-size: var(--al-button-height);
   border-radius: var(--al-radius-sm);
   color: var(--al-color-text);
 }
-[class*='toggleButton']:hover { background: var(--al-color-surface-sunk); }
+[class*='toggleButton']:hover,
+.al-theme-toggle__button:hover { background: var(--al-color-surface-sunk); }
 @media (pointer: coarse) {
+  .al-theme-toggle__button,
   [class*='toggleButton'] { inline-size: var(--al-size-target-touch); block-size: var(--al-size-target-touch); }
 }
-/* One icon for every mode; it turns half a turn when the page is dark. */
-[class*='toggleButton'] .al-icon { transition: rotate var(--al-duration-base) var(--al-ease-standard); }
-:root[data-theme='dark'] [class*='toggleButton'] .al-icon { rotate: 180deg; }
+.al-theme-toggle { display: flex; }
+.al-theme-toggle__button { display: inline-flex; align-items: center; justify-content: center; }
+.al-theme-toggle__button:disabled { cursor: not-allowed; }
+/* The mode in use: the half-filled disc for the system's, a sun, a moon; as
+   big as the navbar's other marks (.al-brand-link). */
+.al-theme-toggle__icon { display: none; inline-size: 1.25rem; block-size: 1.25rem; }
+/* In the navbar, the button reaches past the icon on both sides by its
+   padding, so the icon, not the button, keeps the items' spacing and meets
+   the navbar's end. */
+.navbar__items .al-theme-toggle { margin-inline: calc((var(--al-button-height) - 1.25rem) / -2); }
+[data-theme-choice='system'] .al-theme-toggle__icon--system,
+[data-theme-choice='light'] .al-theme-toggle__icon--light,
+[data-theme-choice='dark'] .al-theme-toggle__icon--dark { display: block; }
+
+/* A link drawn as a mark, its name for screen readers (aria-label): GitHub,
+   npm and Docusaurus, in the navbar (className: 'al-brand-link al-brand-link--github')
+   or anywhere else. In the link's colour, without the external-link arrow;
+   in the mobile menu, which has room, its name beside it. */
+.al-brand-link { display: inline-flex; align-items: center; gap: var(--al-space-2); }
+.al-brand-link::before {
+  content: '';
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  background: currentColor;
+  -webkit-mask: var(--_mark) center / contain no-repeat;
+  mask: var(--_mark) center / contain no-repeat;
+}
+.al-brand-link--github { --_mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2c-3.3.7-4-1.6-4-1.6-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 0-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-6 0-1.2.5-2.3 1.3-3.1-.2-.4-.6-1.6 0-3.2 0 0 1-.3 3.4 1.2a11.5 11.5 0 0 1 6 0C17.3 4.6 18.3 5 18.3 5c.7 1.6.2 2.9.1 3.2.8.8 1.3 1.9 1.3 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3'/%3E%3C/svg%3E"); }
+.al-brand-link--npm::before { background: #cb3837; } /* npm's red, whatever the link's colour */
+.al-brand-link--npm { --_mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z'/%3E%3C/svg%3E"); }
+.al-brand-link svg { display: none; }
+/* On a phone, the navbar's items are in its menu, as Infima has them. */
+@media (max-width: 996px) {
+  .navbar__items .al-brand-link.navbar__item { display: none; }
+}
+.navbar-sidebar .al-brand-link--github::after { content: 'GitHub'; }
+.navbar-sidebar .al-brand-link--npm::after { content: 'npm'; }
+/* Docusaurus's dinosaur, in its own colours: drawn, not masked. */
+.al-brand-link--docusaurus::before {
+  background: url('../marks/docusaurus.svg') center / contain no-repeat;
+  -webkit-mask: none;
+  mask: none;
+}
+.navbar-sidebar .al-brand-link--docusaurus::after { content: 'Docusaurus'; }
+/* A row of them, as a footer column's last item. */
+.al-brand-links { display: flex; gap: var(--al-space-4); margin-block-start: var(--al-space-2); }
+.al-brand-links a { color: var(--al-color-text-muted); }
+.al-brand-links a:hover { color: var(--al-color-accent); }
+
+/* ---------- Search ---------- */
+/* A search plugin's box (@easyops-cn/docusaurus-search-local, or any that
+   uses Infima's navbar__search-input): a field, as the design system's. */
+.navbar__search-input {
+  block-size: var(--al-size-control-md);
+  border: var(--al-border-hairline) solid var(--al-color-control);
+  border-radius: var(--al-radius-sm);
+  background-color: var(--al-color-surface);
+  color: var(--al-color-text);
+  font-family: var(--al-font-sans);
+  font-size: var(--al-text-sm);
+}
+.navbar__search-input::placeholder { color: var(--al-color-text-muted); }
+.navbar__search-input:focus { border-color: var(--al-color-accent); outline: var(--al-border-focus) solid var(--al-color-focus); outline-offset: 1px; }
 
 /* ---------- Sidebar ---------- */
 .theme-doc-sidebar-container {
@@ -314,11 +381,24 @@ strong, b { font-weight: var(--al-weight-semibold); }
 }
 .menu__link--sublist-caret::after,
 .menu__caret::before {
+  --_chevron: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="square"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>');
   filter: none;
   background: var(--al-color-text-muted);
-  -webkit-mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="square"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>') center / 1.125rem no-repeat;
-  mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="square"><path d="M6.5 9.5l5.5 5.5 5.5-5.5"/></svg>') center / 1.125rem no-repeat;
+  -webkit-mask: var(--_chevron) center / 1.125rem no-repeat;
+  mask: var(--_chevron) center / 1.125rem no-repeat;
+  /* Infima turns its own (upward) chevron. This one is drawn the way it
+     points, open or closed, so it stays on the pixel grid: a turned mask
+     blurs at its ends. */
+  transform: none !important;
+  transition: none;
 }
+/* Closed, the chevron points along the line, at what it would open. */
+.menu__list-item--collapsed .menu__link--sublist-caret::after,
+.menu__list-item--collapsed .menu__caret::before { --_chevron: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="square"><path d="M9.5 6.5l5.5 5.5-5.5 5.5"/></svg>'); }
+[dir='rtl'] .menu__list-item--collapsed .menu__link--sublist-caret::after,
+[dir='rtl'] .menu__list-item--collapsed .menu__caret::before { --_chevron: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="1.5" stroke-linecap="square"><path d="M14.5 6.5L9 12l5.5 5.5"/></svg>'); }
+/* The caret shares its row's hover, not a box of its own. */
+.menu__caret:hover { background: none; }
 
 /* ---------- On this page (table of contents) ---------- */
 .table-of-contents { padding-block: 0; font-size: var(--al-text-sm); }
@@ -463,38 +543,102 @@ hr { block-size: 0; border: 0; border-block-start: var(--al-border-hairline) sol
   unicode-bidi: isolate;
 }
 a code { color: inherit; }
+/* A code block in a window (CodeBlock/Layout), as on Arabesque Labs' sites:
+   a bar with three dots, the title or the language, and Copy; the code; and
+   a caption under it. It stands a little off the page. */
 .theme-code-block {
   border: var(--al-border-hairline) solid var(--al-color-line);
-  border-radius: var(--al-radius-sm);
+  border-radius: var(--al-radius-md);
   background: var(--al-color-surface-sunk);
-  box-shadow: none !important;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -12px rgb(0 0 0 / 0.18) !important;
   direction: ltr;
+  overflow: hidden;
 }
-.theme-code-block [class*='codeBlockTitle'] {
+:root[data-theme='dark'] .theme-code-block { box-shadow: 0 1px 2px rgb(0 0 0 / 0.2), 0 12px 32px -12px rgb(0 0 0 / 0.6) !important; }
+.al-code-window__bar {
   display: flex;
   align-items: center;
+  gap: var(--al-space-4);
   min-block-size: var(--al-size-control-md);
-  padding-block: 0;
   padding-inline: var(--al-space-4) var(--al-space-1);
-  border-block-end: var(--al-border-hairline) solid var(--al-color-line) !important;
+  border-block-end: var(--al-border-hairline) solid var(--al-color-line);
+}
+.al-code-window__dots { display: inline-flex; flex: none; gap: 6px; }
+.al-code-window__dots i { inline-size: 10px; block-size: 10px; border-radius: 50%; background: var(--al-color-line-strong); }
+.al-code-window__title {
+  min-inline-size: 0;
+  overflow: hidden;
   font-family: var(--al-font-mono);
   font-size: var(--al-text-xs);
-  font-weight: var(--al-weight-regular);
+  color: var(--al-color-text-muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.al-code-window__content { position: relative; direction: ltr; }
+.al-code-window__caption {
+  margin: 0;
+  padding: var(--al-space-2) var(--al-space-4);
+  border-block-start: var(--al-border-hairline) solid var(--al-color-line);
+  font-size: var(--al-text-sm);
   color: var(--al-color-text-muted);
 }
 .theme-code-block pre {
   border-radius: 0;
   font-size: var(--al-text-sm);
+  line-height: 1.75;
   tab-size: 2;
 }
 /* A marked line: an accent rule at its start, on the accent wash. */
 .theme-code-block-highlighted-line { box-shadow: inset 2px 0 0 var(--al-color-accent); }
 .theme-code-block [class*='codeLineNumber'] { color: var(--al-color-text-muted); }
-.theme-code-block button {
+
+/* Copy, at the bar's end: a quiet button with its icon and a word. */
+.al-code-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--al-space-1-5);
+  margin-inline-start: auto;
+  min-block-size: var(--al-button-height-sm);
+  padding-inline: var(--al-space-2);
+  border-radius: var(--al-radius-sm);
+  color: var(--al-color-text-muted);
+  font-size: var(--al-text-xs);
+  font-weight: var(--al-weight-medium);
+  transition: background-color var(--al-duration-fast) var(--al-ease-standard), color var(--al-duration-fast) var(--al-ease-standard);
+}
+.al-code-copy:hover { background: var(--al-color-surface); color: var(--al-color-text); }
+.al-code-copy--copied,
+.al-code-copy--copied:hover { color: var(--al-color-success); }
+
+/* Word wrap, over the code, as the classic theme has it. */
+.al-code-window__buttons {
+  position: absolute;
+  inset-block-start: var(--al-space-2);
+  inset-inline-end: var(--al-space-2);
+  display: flex;
+}
+.al-code-window__buttons button {
+  display: flex;
+  align-items: center;
+  padding: 0.4rem;
   border: var(--al-border-hairline) solid var(--al-color-line);
   border-radius: var(--al-radius-sm);
   background: var(--al-color-surface);
   color: var(--al-color-text);
+  line-height: 0;
+  opacity: 0;
+  transition: opacity var(--al-duration-fast) var(--al-ease-standard);
+}
+.theme-code-block:hover .al-code-window__buttons button { opacity: 0.6; }
+.al-code-window__buttons button:is(:hover, :focus-visible) { opacity: 1; }
+
+/* A shell's commands: a prompt before each, drawn, never selected or copied. */
+.al-code-line--command:not(:has([class*='codeLineContent']))::before,
+.al-code-line--command [class*='codeLineContent']::before {
+  content: '$ ';
+  color: var(--al-color-accent);
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 /* ---------- Buttons ---------- */
@@ -692,7 +836,8 @@ div[class*='announcementBar'] {
 /* ---------- Site footer (Footer/Layout) ---------- */
 /* The footer's logo (and a line on what the site is) at the start, the link
    columns at the end, both from the top; the legal lines under a hairline.
-   The logo says who makes the site in a comic speech bubble. */
+   The logo says hello in a comic speech bubble; under the legal lines, the
+   attribution badge says who makes the site. */
 
 /* Comic Neue bold, comic lettering for the speech bubble only (SIL Open
    Font License 1.1, src/speech/OFL-comicneue.txt). Not one of the design
@@ -709,7 +854,7 @@ div[class*='announcementBar'] {
 .al-site-footer__inner {
   --_mascot: 10rem;
   --_bubble: 17rem;
-  --_speech: 1.3rem;
+  --_speech: 1.75rem;
   max-inline-size: var(--al-size-page);
   margin-inline: auto;
   padding-inline: var(--al-space-gutter);
@@ -732,22 +877,21 @@ div[class*='announcementBar'] {
   line-height: var(--al-leading-prose);
   color: var(--al-color-text-muted);
 }
-/* Without a logo, the attribution is a quiet pill under the blurb. */
+/* The attribution: the design system's badge, "A product of Arabesque
+   Labs", its dark pill on the light theme and its light one on the dark. It
+   opens in a new tab. */
 .al-site-footer__attribution {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--al-space-2);
-  margin-block-start: var(--al-space-5);
-  min-block-size: var(--al-size-target-min);
-  padding-inline: var(--al-space-3);
-  border: var(--al-border-hairline) solid var(--al-color-line-strong);
+  display: inline-block;
+  margin-block-start: var(--al-space-4);
   border-radius: var(--al-radius-full);
-  color: var(--al-color-text);
-  font-size: var(--al-text-xs);
-  font-weight: var(--al-weight-medium);
-  text-decoration: none;
+  line-height: 0;
+  transition: opacity var(--al-duration-fast) var(--al-ease-standard);
 }
-.al-site-footer__attribution:hover { border-color: var(--al-color-text); color: var(--al-color-text); text-decoration: none; }
+.al-site-footer__attribution:hover { opacity: 0.85; }
+.al-site-footer__attribution img { block-size: auto; max-inline-size: 100%; }
+.al-site-footer__badge--on-dark,
+:root[data-theme='dark'] .al-site-footer__badge--on-light { display: none; }
+:root[data-theme='dark'] .al-site-footer__badge--on-dark { display: inline; }
 /* The link columns: Infima's row and columns, as a grid. One row, as many
    columns as there are groups of links, each as wide as its longest link. */
 .al-site-footer .footer__links {
@@ -797,21 +941,19 @@ div[class*='announcementBar'] {
 
 /* The speech bubble: a comic bubble, white with an inked outline in either
    theme, hanging beside the logo with its tail pointing up at its mouth; the
-   Arabesque Labs mark and the words in comic lettering. It leans, and grows a
-   little when you point at it. It opens in a new tab. */
+   words in comic lettering. It leans, and grows a little when you point at
+   it. */
 .al-site-footer__bubble {
   position: absolute;
   inset-inline-start: calc(100% - var(--_mascot) * 0.06);
   inset-block-start: calc(var(--_mascot) * 0.3);
   inline-size: var(--_bubble);
   line-height: 0;
-  text-decoration: none;
   transform: rotate(-4deg);
   transform-origin: 0 0;
   transition: transform var(--al-duration-base) var(--al-ease-standard);
 }
-.al-site-footer__bubble:hover { transform: rotate(-2deg) scale(1.04); text-decoration: none; }
-.al-site-footer__bubble:focus-visible { outline-offset: 4px; }
+.al-site-footer__bubble:hover { transform: rotate(-2deg) scale(1.04); }
 .al-site-footer__bubble svg { display: block; inline-size: 100%; block-size: auto; overflow: visible; transform: scaleY(-1); }
 .al-site-footer__bubble path {
   fill: #ffffff;
@@ -834,13 +976,6 @@ div[class*='announcementBar'] {
   text-align: center;
   text-wrap: balance;
 }
-/* The Arabesque Labs mark, in the bubble's ink whatever the theme. */
-.al-site-footer__speech .al-site-footer__speech-mark {
-  display: inline-flex;
-  margin-inline-end: 0.3em;
-  color: #0f172b;
-  vertical-align: -0.25em;
-}
 /* Right to left, the logo stands at the right: the bubble's tail turns to
    point back at it, and the lean turns too. */
 [dir='rtl'] .al-site-footer__bubble { transform: rotate(4deg); transform-origin: 100% 0; }
@@ -849,7 +984,7 @@ div[class*='announcementBar'] {
 [dir='rtl'] .al-site-footer__speech { translate: 50% -50%; }
 
 @media (max-width: 52rem) {
-  .al-site-footer__inner { --_mascot: 7rem; --_bubble: 13rem; --_speech: 1.05rem; }
+  .al-site-footer__inner { --_mascot: 7rem; --_bubble: 13rem; --_speech: 1.35rem; }
   .al-site-footer--mascot .al-site-footer__top { grid-template-columns: minmax(0, 1fr); }
   .al-site-footer__top { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'about' 'links'; }
   .al-site-footer .footer__links { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: start; }

@@ -1,8 +1,8 @@
 import React from 'react';
 import ArabesqueIcon from '@theme/ArabesqueIcon';
 
-// As in the design system's theme button: one icon, the half-filled disc,
-// turned half a turn when the page is dark. Never a sun or a moon.
+// The system's theme: the design system's half-filled disc. The colour mode
+// button shows it while the page follows the system.
 export default function IconSystemColorMode({width, height, ...props}) {
   return <ArabesqueIcon name="theme" size={width || 24} {...props} />;
 }

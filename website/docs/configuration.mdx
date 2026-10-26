@@ -20,7 +20,8 @@ export default {
 | --- | --- | --- | --- |
 | `fonts` | `boolean` | `true` | Loads the design system's font files, which come with the theme: Jost, Newsreader, IBM Plex Mono, Kufam, IBM Plex Sans Arabic and Amiri. Set it to `false` when the site loads them itself. |
 | `footer.blurb` | `string` | | A line on what the site is, in the footer's about column. |
-| `footer.attribution` | `{label, href}` | | Who makes the site, in words the footer's logo says in a speech bubble, such as "Psst. I'm a product of Arabesque Labs." Without a logo, it's a pill under the blurb. |
+| `footer.greeting` | `string` | `'Hello, world!'` | What the footer's logo says in a comic speech bubble. Set it to `''` for no bubble. |
+| `footer.attribution` | `{label, href}` | | Who makes the site: the design system's "A product of Arabesque Labs" badge, linked to `href`, under the legal lines. `label` is the badge's text alternative, so it should say what the badge says. |
 
 The fonts are served from your own site, so pages make no requests to a font service.
 
@@ -91,7 +92,7 @@ export default {
 };
 ```
 
-As in the design system's header, the colour mode button has one icon, the half-filled disc, which turns half a turn when the page is dark. Its label says which mode is chosen.
+As on careerhunt.app, the colour mode button goes through the system's theme, light and dark, in turn. It shows the one in use (the half-filled disc for the system's, a sun, a moon), and its label says which comes next: "Switch to dark theme".
 
 ## Footer
 
@@ -101,7 +102,9 @@ The footer follows Arabesque Labs' sites:
 - **The blurb:** the theme's `footer.blurb`, under the logo.
 - **The link columns:** `footer.links`, side by side at the end.
 - **The legal lines:** `footer.copyright`, under a hairline.
-- **The speech bubble:** the logo says the theme's `footer.attribution` in a comic speech bubble, with the Arabesque Labs mark, in Comic Neue lettering. The bubble's link opens in a new tab.
+- **The speech bubble:** the logo says the theme's `footer.greeting` ("Hello, world!") in a comic speech bubble, in Comic Neue lettering.
+- **The attribution:** the theme's `footer.attribution`, as the design system's badge, "A product of Arabesque Labs", under the legal lines: its dark pill on the light theme and its light one on the dark, in Arabic on an Arabic page. It opens in a new tab.
+- **Icon links:** a link with the class `al-brand-link al-brand-link--github` (or `--npm`, or `--docusaurus`) is drawn as that mark: GitHub's in the link's colour, npm's and Docusaurus's in their own. Give it an `aria-label`. In a footer column, put them in a row with an `html` item: `<div class="al-brand-links">…</div>`.
 
 ```js title="docusaurus.config.js"
 export default {
@@ -111,12 +114,19 @@ export default {
       {
         footer: {
           blurb: 'What this site is, in one line.',
-          attribution: {label: "Psst. I'm a product of Arabesque Labs.", href: 'https://arabesquelabs.com'},
+          greeting: 'Hello, world!',
+          attribution: {label: 'A product of Arabesque Labs', href: 'https://arabesquelabs.com'},
         },
       },
     ],
   ],
   themeConfig: {
+    navbar: {
+      items: [
+        // GitHub's mark, not its name.
+        {href: 'https://github.com/you/your-project', position: 'right', className: 'al-brand-link al-brand-link--github', 'aria-label': 'GitHub'},
+      ],
+    },
     footer: {
       logo: {src: 'img/arabesque-docusaurus.svg', alt: 'Back to the top', href: '#', width: 160, height: 160},
       links: [/* columns of links */],
@@ -136,9 +146,11 @@ The theme restyles the classic theme with CSS, and replaces these components:
 | --- | --- |
 | `Admonition/Layout` | Admonitions become the design system's notices: the kind's icon and title word, on its wash, with a rule at the start edge. |
 | `Admonition/Icon/*` | The design system's status icons. |
-| `Icon/LightMode`, `Icon/DarkMode`, `Icon/SystemColorMode` | The design system's theme icon. |
+| `ColorModeToggle` | The colour mode button described above, its label saying which mode comes next. |
+| `Icon/LightMode`, `Icon/DarkMode`, `Icon/SystemColorMode` | A sun, a moon, and the design system's half-filled disc, in its 1.5px stroke. |
 | `Icon/Menu`, `Icon/Close` | The design system's icons: 1.5px stroke, square caps. |
-| `Footer/Layout` | The footer described above: the logo with its speech bubble, the blurb, the link columns and the legal lines. |
+| `CodeBlock/Layout`, `CodeBlock/Buttons`, `CodeBlock/Buttons/CopyButton`, `CodeBlock/Line`, `CodeBlock/Content/String` | Code blocks in a window: a bar with the title or language and a Copy button that says what it did, a prompt before a shell's commands, and a caption. See [Markdown features](./markdown-features.mdx#code). |
+| `Footer/Layout` | The footer described above: the logo with its speech bubble, the blurb, the link columns, and the legal lines with the attribution badge under them. |
 | `MDXComponents` | Adds the [Arabesque components](./components.mdx) to every MDX file. |
 
 ## Changing a component further

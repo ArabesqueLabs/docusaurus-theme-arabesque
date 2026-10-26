@@ -63,6 +63,13 @@ Write the title as you want it to appear. The theme capitalises only the first l
 
 ## Code
 
+Each code block is a window: a bar with three dots, the block's title (or its language), and a Copy button that says "Copied" once it has. A shell's block (`bash`, `sh`, `shell` or `zsh`) is a terminal: each command has a `$` before it, which isn't copied. Comments, blank lines and indented lines get no prompt. Give a block a `caption="…"` for a line under it.
+
+```bash caption="Then open http://localhost:3000."
+npm install @arabesquelabs/docusaurus-theme-arabesque
+npm start
+```
+
 ```js title="src/pages/index.js" showLineNumbers
 import Layout from '@theme/Layout';
 import ArabesqueHero from '@theme/ArabesqueHero';

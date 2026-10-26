@@ -1,6 +1,6 @@
 {
   "name": "@arabesquelabs/docusaurus-theme-arabesque",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A Docusaurus theme built on the Arabesque design system.",
   "license": "MIT",
   "main": "src/index.js",
@@ -9,7 +9,8 @@
     "./prism": "./src/prism.js",
     "./tokens.json": "./tokens.json",
     "./assets/*": "./assets/*",
-    "./tokens.css": "./src/css/tokens.css"
+    "./tokens.css": "./src/css/tokens.css",
+    "./package.json": "./package.json"
   },
   "files": [
     "src",
@@ -36,7 +37,7 @@
     "clsx": "^2.0.0"
   },
   "arabesque": {
-    "designSystem": "0.8.0"
+    "designSystem": "0.9.0"
   },
   "repository": {
     "type": "git",

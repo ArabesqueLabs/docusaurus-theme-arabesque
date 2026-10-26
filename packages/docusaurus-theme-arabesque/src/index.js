@@ -13,8 +13,9 @@ const DEFAULT_OPTIONS = {
   // Plex Sans Arabic, Amiri, IBM Plex Mono). Turn off to load them yourself.
   fonts: true,
   // The footer (see Footer/Layout): `blurb`, a line on what the site is,
-  // beside the links; `attribution`, {label, href}, who makes it. The
-  // footer's logo says the label in a comic speech bubble.
+  // beside the links; `greeting`, what the footer's logo says in a comic
+  // speech bubble ("Hello, world!"; '' for none); `attribution`, {label,
+  // href}, who makes it, as the "A product of Arabesque Labs" badge.
   footer: {},
 };
 
@@ -64,7 +65,8 @@ export function getSwizzleConfig() {
       ArabesquePattern: safe('The generative 4.8.8 pattern background.'),
       ArabesqueSteps: safe('A numbered sequence.'),
       'Admonition/Layout': safe('Admonitions as Arabesque notices.'),
-      'Footer/Layout': safe('The footer: a blurb beside the links, the legal lines under a hairline, and the logo standing on it with a speech bubble.'),
+      ColorModeToggle: safe("The colour mode button: the system's theme, light and dark, in turn."),
+      'Footer/Layout': safe('The footer: a blurb beside the links, the legal lines under a hairline, the logo with a speech bubble, and the attribution badge.'),
     },
   };
 }
@@ -83,12 +85,13 @@ export function validateOptions({options = {}}) {
     const ok =
       typeof footer === 'object' &&
       (footer.blurb === undefined || typeof footer.blurb === 'string') &&
+      (footer.greeting === undefined || typeof footer.greeting === 'string') &&
       (footer.attribution === undefined ||
         (typeof footer.attribution?.label === 'string' &&
           typeof footer.attribution?.href === 'string'));
     if (!ok) {
       throw new Error(
-        'docusaurus-theme-arabesque: "footer" takes {blurb?: string, attribution?: {label: string, href: string}}.',
+        'docusaurus-theme-arabesque: "footer" takes {blurb?: string, greeting?: string, attribution?: {label: string, href: string}}.',
       );
     }
   }
